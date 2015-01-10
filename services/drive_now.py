@@ -35,7 +35,7 @@ class DriveNowService(base_service.VehicleService):
                 'address': ' '.join(car['address']),
                 'license_plate': car['licensePlate'],
                 'make': car['make'],
-                'model': car['modelName'],
+                'model': car['modelName'].replace('BMW', '').strip(),
                 'color': car['color'],
                 'vehicle_name': car['name'],
                 'image_url': 'https://us.drive-now.com/static/drivenow/img/cars/%s.png' % car['modelIdentifier'],
@@ -48,6 +48,7 @@ class DriveNowService(base_service.VehicleService):
 
 if __name__ == '__main__':
     request = base_service.VehicleRequest({
+        'duration_minutes': 120,
         'location': {
             'lat': 37.7735937,
             'lng': -122.4036157,

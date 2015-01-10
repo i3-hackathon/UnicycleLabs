@@ -147,6 +147,13 @@ class EpochField(Field):
     def to_python(self, value):
         return datetime.utcfromtimestamp(value/1000.0)
 
+class ParsedIntegerField(Field):
+    def to_python(self, value):
+        return int(value)
+
+class ParsedFloatField(Field):
+    def to_python(self, value):
+        return float(value)
 
 # provided for readability purposes
 BooleanField = Field

@@ -7,6 +7,8 @@ import constants
 from models import all_models
 from services import base_service
 from services import drive_now
+from services import zipcar
+import utils
 
 class Status(object):
     OK = 'OK'
@@ -15,25 +17,28 @@ class Status(object):
 def index():
     return render_template('index.html')
 
-VEHICLE_SERVICES = (drive_now.DriveNowService(),)
+VEHICLE_SERVICES = (drive_now.DriveNowService(), zipcar.ZipcarService())
 
 @app.route('/search')
 def search():
-    lat = request.args['lat']
-    lng = request.args['lng']
     vehicle_request = base_service.VehicleRequest({
         'duration_minutes': int(request.args['duration']),
         'location': {
-            'lat': request.args['lat'],
-            'lng': request.args['lng'],
+            'lat': float(request.args['lat']),
+            'lng': float(request.args['lng'])   ,
             }
         })
-
-    vehicles = []
-    for service in VEHICLE_SERVICES:
-        vehicles.extend(service.get_vehicles(vehicle_request))
+    vehicles = get_vehicles(vehicle_request)
     raw_vehicles = [v.raw for v in vehicles]
     return json.jsonify(status=Status.OK, vehicles=raw_vehicles)
+
+def get_vehicles(vehicle_request):
+    fns = []
+    import pprint
+    for service in VEHICLE_SERVICES:
+        fns.append(lambda service=service: service.get_vehicles(vehicle_request))
+    vehicles_lists = utils.parallelize_closures(fns)
+    return utils.flatten(vehicles_lists)
 
 if __name__ == '__main__':
     app.debug = constants.DEBUG
