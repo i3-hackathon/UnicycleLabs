@@ -8,8 +8,11 @@ html, body {
 }
 
 .padding-5 {
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 0px 5px;
+}
+
+.padding-10 {
+  padding: 0px 10px;
 }
 
 a:hover {
@@ -26,28 +29,43 @@ a:hover {
   margin-bottom: 0;
 }
 
+#vehicle-results-container {
+  width: 100%;
+}
+
 #vehicle-results-container .row {
   width: 100%;
 }
 
 #vehicle-results-container .vehicle-results {
   margin: 0px auto;
-  width: 500px;
+  max-width: 500px;
 }
 
 #vehicle-results-container .vehicle-result {
+  padding: 20px 0px;
+  border-bottom: 1px solid #DDDDDD;
 }
 
 #vehicle-results-container .vehicle-result-left {
-  border-right: 1px solid #DDDDDD;
+  border-right: 2px solid #b849a3;
+}
+
+#vehicle-results-container .vehicle-result-right {
 }
 
 #vehicle-results-container .vehicle-result-img {
   width: 100%;
 }
 
+#vehicle-results-container .vehicle-result-service-provider-img {
+  height: 20px;
+  margin: 10px 0px;
+}
+
 #vehicle-results-container .vehicle-result-make-model {
   font-size: 1.5em;
+  color: #33c2cc;
 }
 
 #vehicle-results-container .vehicle-result-booking-details {
@@ -64,8 +82,26 @@ a:hover {
 
 #vehicle-results-container .vehicle-result-distance {
   font-size: 3.0em;
+  color: #FF9900;
+  padding: 10px 0px;
 }
 
 #vehicle-results-container .vehicle-result-price {
-  font-size: 5.0em;
+  font-size: 3.0em;
+  color: #3299BB;
+  padding: 10px 0px;
+}
+
+#vehicle-results-container .vehicle-result-price-details {
+  padding: 10px 0px;  
+}
+
+@media (max-width: 768px) {
+  #vehicle-results-container .vehicle-result-price,
+  #vehicle-results-container .vehicle-result-distance {
+    font-size: 1.8em;
+  }
+  #vehicle-results-container .vehicle-result-model {
+    font-size: 1.3em;
+  }
 }
