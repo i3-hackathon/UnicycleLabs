@@ -22,6 +22,7 @@ def search():
     lat = request.args['lat']
     lng = request.args['lng']
     vehicle_request = base_service.VehicleRequest({
+        'duration_minutes': int(request.args['duration']),
         'location': {
             'lat': request.args['lat'],
             'lng': request.args['lng'],
