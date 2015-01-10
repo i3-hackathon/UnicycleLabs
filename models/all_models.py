@@ -33,6 +33,7 @@ class Vehicle(model_base.Model):
     license_plate = model_base.StringField('license_plate')
     make = model_base.StringField('make')
     model = model_base.StringField('model')
+    year = model_base.NumberField('year', optional=True)
     color = model_base.StringField('color')
     vehicle_name = model_base.StringField('vehicle_name', optional=True)
     image_url = model_base.StringField('image_url')
