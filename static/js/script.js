@@ -10,7 +10,7 @@ function RootCtrl($scope, $appState, $http) {
   $scope.appState = $appState;
 
   $scope.dummySearch = function() {
-    $http.get('/search')
+    $http.get('/search?lat=37.7735937&lng=-122.4036157&duration=120')
       .success(function(response) {
         $appState.vehicleResults = response['vehicles'];
       });
