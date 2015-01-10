@@ -13,7 +13,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no"/>  
   <link rel="shortcut icon" href="/static/img/favicon.png"/>
 </head>
-<body>
-  <div>Hello world</div>
+<body ng-controller="RootCtrl">
+  <div>
+    <button class="btn btn-default" ng-click="dummySearch()">
+      Search
+    </button>
+  </div>
+
+  <div class="vehicle-results" ng-controller="VehicleResultsCtrl"
+    ng-if="appState.hasVehicleResults()">
+    <div ng-repeat="result in appState.vehicleResults" class="vehicle-result">
+      <span>[[result['service'] ]]</span>
+      <img ng-src="[[result['image_url'] ]]"/>
+    </div>
+  </div>
+
+  <script>
+    initApp();
+  </script>
 </body>
 </html>
