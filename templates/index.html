@@ -9,7 +9,7 @@
   <script src="/static/js/script.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="/static/css/style.css"/>
-
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700|Roboto:300,400,700' rel='stylesheet' type='text/css'>
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no"/>  
   <link rel="shortcut icon" href="/static/img/favicon.png"/>
 </head>
@@ -20,14 +20,40 @@
     </button>
   </div>
 
-  <div class="vehicle-results" ng-controller="VehicleResultsCtrl"
-    ng-if="appState.hasVehicleResults()">
-    <div ng-repeat="result in appState.vehicleResults" class="vehicle-result">
-      <span>[[result['service'] ]]</span>
-      <img ng-src="[[result['image_url'] ]]"/>
+  <div class="container" id="vehicle-results-container">
+    <div class="row">
+      <div class="vehicle-results" ng-controller="VehicleResultsCtrl"
+        ng-if="appState.hasVehicleResults()">
+        <div ng-repeat="result in appState.vehicleResults" class="vehicle-result">
+          <div class="col-xs-8 vehicle-result-left padding-5">
+            <img class="vehicle-result-img" ng-src="[[result['image_url'] ]]"/>
+            <div class="vehicle-result-make-model">
+              BMW M4 - 2015
+            </div>
+            <div class="vehicle-result-service-provider">
+              [[result['service'] ]]
+            </div>
+            <div class="vehicle-result-booking-details">
+              GetAround Instant Book, Requires Zipcar Membership
+            </div>
+            <div class="vehicle-result-metadata-preview">
+              "Kate", Ice Blue, what a ride
+            </div> 
+          </div>
+          <div class="col-xs-4 vehice-result-right padding-5">
+            <div class="vehicle-result-price">
+              $39
+            </div>
+            <div class="vehicle-result-distance">
+              0.2 mi.
+            </div>
+            <div class="vehicle-result-price-details">
+              $12/30 mins, $0.10/min after
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
   <script>
     initApp();
   </script>
