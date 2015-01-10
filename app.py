@@ -7,6 +7,7 @@ import constants
 from models import all_models
 from services import base_service
 from services import drive_now
+from services import getaround
 from services import zipcar
 import utils
 
@@ -17,12 +18,13 @@ class Status(object):
 def index():
     return render_template('index.html')
 
-VEHICLE_SERVICES = (drive_now.DriveNowService(), zipcar.ZipcarService())
+VEHICLE_SERVICES = (drive_now.DriveNowService(), zipcar.ZipcarService(), getaround.GetaroundService())
 
 @app.route('/search')
 def search():
     vehicle_request = base_service.VehicleRequest({
-        'duration_minutes': int(request.args['duration']),
+        'start_time': request.args['start_time'],
+        'end_time': request.args['end_time'],
         'location': {
             'lat': float(request.args['lat']),
             'lng': float(request.args['lng'])   ,

@@ -70,7 +70,8 @@ class ZipcarService(base_service.VehicleService):
 
 if __name__ == '__main__':
     request = base_service.VehicleRequest({
-        'duration_minutes': 120,
+        'start_time': u'2015-01-10T23:00:00Z',
+        'end_time': u'2015-01-11T01:00:00Z',
         'location': {
             'lat': 37.7735937,
             'lng': -122.4036157,
