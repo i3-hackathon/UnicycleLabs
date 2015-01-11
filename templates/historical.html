@@ -3,11 +3,11 @@
 <head>
   <title>Drive Now - Historical Availability</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
   <script src="//maps.googleapis.com/maps/api/js?libraries=places"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
   <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700|Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no"/>  
   <link rel="shortcut icon" href="/static/img/favicon.png"/>
 
@@ -32,17 +32,39 @@
       background-color: rgba(255, 255, 255, 0.7);
       border-radius: 2px;
       font-size: 14pt;
+      width: 600px;
+    }
+    #hour-render, #day-render {
+      color: blue;
     }
   </style>
 
   <script>
-    function init(pickupLatLngs) {
-      console.log(pickupLatLngs);
-      var map = new google.maps.Map($('#map')[0], {
+    var MAP = null;
+    var MARKERS = [];
+    var SLIDER_STATE = {
+      day: 1,
+      hour: 0
+    };
+
+    function init() {
+      var map = MAP = new google.maps.Map($('#map')[0], {
         center: new google.maps.LatLng(0, 0),
         zoom: 3
       });
+    }
 
+    function clearMap() {
+      $.each(MARKERS, function(i, marker) {
+        marker.setMap(null);
+      });
+      MARKERS = [];
+    }
+
+    function drawPoints(pickupLatLngs) {
+      clearMap();
+
+      var map = MAP;
       var bounds = new google.maps.LatLngBounds();
 
       $.each(pickupLatLngs, function(i, latLngJson) {
@@ -51,14 +73,44 @@
           map: map,
           position: latlng
         });
+        MARKERS.push(marker);
         bounds.extend(latlng);
       });
 
       map.fitBounds(bounds);
     }
 
+    function updateMap() {
+      $.ajax('/historical/search?day=' + SLIDER_STATE.day + '&hour=' + SLIDER_STATE.hour, {
+        success: function(response) {
+          drawPoints(response['latlngs']);
+          $('#date-str').html(response['date_str']);
+          $('#time-str').html(response['time_str']);
+        }
+      });
+    }
+
     $(function() {
-      init({{pickup_latlngs | safe}});
+      init();
+      $( "#day-slider" ).slider({
+        min: 1,
+        max: 31,
+        slide: function(event, ui) {
+          SLIDER_STATE.day = ui.value;
+          $('#day-render').html(ui.value);
+          updateMap();
+        }
+      });
+      $( "#hour-slider" ).slider({
+        min: 0,
+        max: 23,
+        slide: function(event, ui) {
+          SLIDER_STATE.hour = ui.value;
+          $('#hour-render').html(ui.value);
+          updateMap();
+        }
+      });
+      updateMap();
     });
   </script>
 
@@ -69,7 +121,17 @@
     </div>
   </div>
   <div class="info-section">
-    Car pickups in Munich, {{date_str}} between 1pm and 2pm
+    <div>
+      Car pickups in Munich on <span id="date-str"></span> in the <span id="time-str"></span> hour.
+    </div>
+    <div>
+      Day of Week - <span id="day-render"></span>
+      <div id="day-slider"></div>
+    </div>
+    <div>
+      Hour of Day - <span id="hour-render"></span>
+      <div id="hour-slider"></div>
+    </div>
   </div>
 </body>
 </html>

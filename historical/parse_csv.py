@@ -1,3 +1,4 @@
+import collections
 import csv
 import fileinput
 import json
@@ -14,8 +15,6 @@ def main(infile, day_of_month, hour_of_day):
     reader = csv.reader(infile)
     reader.next()
     latlngs = []
-    days = set()
-    hours = set()
     for row in reader:
         pickup_dt = parse_utc_datetime(row[2])
         if pickup_dt.hour == hour_of_day and pickup_dt.day == day_of_month:
@@ -26,7 +25,19 @@ def main(infile, day_of_month, hour_of_day):
 def parse_utc_datetime(dt_str, local_tz=TZ_GERMANY):
     return dateutil_parser.parse(dt_str, dayfirst=True).replace(tzinfo=TZ_UTC).astimezone(local_tz)
 
+def build_index(infile):
+    reader = csv.reader(infile)
+    reader.next()
+    index = collections.defaultdict(lambda: collections.defaultdict(list))
+    for row in reader:
+        pickup_dt = parse_utc_datetime(row[2])
+        latlng = {'lat': row[5], 'lng': row[6]}
+        index[pickup_dt.day][pickup_dt.hour].append(latlng)
+    print json.dumps(index, sort_keys=True, indent=4, separators=(',', ': '))
+
+
 if __name__ == '__main__':
-    day_of_month = 12
-    hour_of_day = 13
-    main(fileinput.input(), day_of_month, hour_of_day)
+    # day_of_month = 12
+    # hour_of_day = 13
+    # main(fileinput.input(), day_of_month, hour_of_day)
+    build_index(fileinput.input())

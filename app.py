@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from dateutil import parser as dateutil_parser
@@ -7,6 +8,7 @@ from flask import request
 
 from app_core import app
 import constants
+from historical import drive_now_historical
 from models import all_models
 from services import base_service
 from services import drive_now
@@ -48,10 +50,14 @@ def get_vehicles(vehicle_request):
 
 @app.route('/historical')
 def historical():
-    date_str = request.args['date']
-    pickup_latlngs = open(os.path.join(constants.PROJECTPATH, 'data/munich_pickups_%s_1pm.csv' % date_str)).read()
-    return render_template('historical.html', pickup_latlngs=pickup_latlngs,
-        date_str=dateutil_parser.parse(date_str).strftime('%a %b %d, %Y'))
+    return render_template('historical.html')
+
+@app.route('/historical/search')
+def historical_search():
+    index = drive_now_historical.Index()
+    latlngs = index.get_latlngs(request.args['day'], request.args['hour'])
+    dt = datetime.datetime(year=2014, month=10, day=int(request.args['day']), hour=int(request.args['hour']))
+    return json.jsonify(latlngs=latlngs, date_str=dt.strftime('%a %b %d'), time_str=dt.strftime('%I%p').lower())
 
 if __name__ == '__main__':
     app.debug = constants.DEBUG
