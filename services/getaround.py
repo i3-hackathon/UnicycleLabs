@@ -19,7 +19,8 @@ class GetaroundService(base_service.VehicleService):
             'page_sort': 'magic',
             }
         response = requests.get(url, params=params)
-        return self.make_vehicles(vehicle_request, response.json()['cars'])
+        vehicles = self.make_vehicles(vehicle_request, response.json()['cars'])
+        return [v for v in vehicles if v.distance_meters < 100000]
 
     def make_vehicles(self, vehicle_request, cars):
         vehicles = []
