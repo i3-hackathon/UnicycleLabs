@@ -25,79 +25,84 @@
     </div>
   </nav>
 
-  <div class="search-form" ng-controller="SearchFormCtrl">
-    <div class="form-group location-input-group">
-      <label for="location-input">Location</label>
-      <input type="text" class="form-control"
-        htd-google-place-autocomplete
-        on-place-change="placeChanged($newPlace)"
-        ng-model="form.rawLocation" id="location-input"
-        ng-focus="locationInputFocused()"/>
-      <div class="location-spinner" ng-show="gettingCurrentLocation">
+  <div class="main-content">
+
+    <div class="search-form" ng-controller="SearchFormCtrl">
+      <div class="form-group location-input-group">
+        <label for="location-input">Location</label>
+        <input type="text" class="form-control"
+          htd-google-place-autocomplete
+          on-place-change="placeChanged($newPlace)"
+          ng-model="form.rawLocation" id="location-input"
+          ng-focus="locationInputFocused()"/>
+        <div class="location-spinner" ng-show="gettingCurrentLocation">
+          <img src="/static/img/spinner-small.gif"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Start time</label>
+        <timepicker ng-model="form.startTime" minute-step="30">
+        </timepicker>
+      </div>
+      <div class="form-group">
+        <label>End time</label>
+        <timepicker ng-model="form.endTime" minute-step="30">
+        </timepicker>
+      </div>
+      <button class="btn btn-default" ng-click="submit()" ng-disabled="searching">
+        Search
+      </button>
+      <div class="search-spinner" ng-show="searching">
         <img src="/static/img/spinner-small.gif"/>
       </div>
     </div>
-    <div class="form-group">
-      <label>Start time</label>
-      <timepicker ng-model="form.startTime" minute-step="30">
-      </timepicker>
-    </div>
-    <div class="form-group">
-      <label>End time</label>
-      <timepicker ng-model="form.endTime" minute-step="30">
-      </timepicker>
-    </div>
-    <button class="btn btn-default" ng-click="submit()" ng-disabled="searching">
-      Search
-    </button>
-    <div class="search-spinner" ng-show="searching">
-      <img src="/static/img/spinner-small.gif"/>
-    </div>
-  </div>
 
-  <div class="container" id="vehicle-results-container">
-    <div class="row">
-      <div class="vehicle-results" ng-controller="VehicleResultsCtrl"
-        ng-if="appState.hasVehicleResults()">
-        <div ng-repeat="result in appState.vehicleResults">
-          <div class="vehicle-result col-xs-12">
-            <div class="col-xs-7 vehicle-result-left">
-              <img class="vehicle-result-img" ng-src="[[result['image_url'] ]]"/>
-              <div class="vehicle-result-make-model padding-10">
-                [[result['make'] ]] [[result['model'] ]]
+    <div class="container" id="vehicle-results-container">
+      <div class="row">
+        <div class="vehicle-results" ng-controller="VehicleResultsCtrl"
+          ng-if="appState.hasVehicleResults()">
+          <div ng-repeat="result in appState.vehicleResults">
+            <div class="vehicle-result col-xs-12">
+              <div class="col-xs-7 vehicle-result-left">
+                <img class="vehicle-result-img" ng-src="[[result['image_url'] ]]"/>
+                <div class="vehicle-result-make-model padding-10">
+                  [[result['make'] ]] [[result['model'] ]]
+                </div>
+                <img class="vehicle-result-service-provider-img padding-10" ng-src="static/img/[[result['service_logo_url'] ]]"/>
+                <div class="vehicle-result-booking-details padding-10">
+                  GetAround Instant Book, Requires Zipcar Membership
+                </div>
+                <div class="vehicle-result-metadata-preview padding-10">
+                  "Kate", Ice Blue, what a ride
+                </div> 
               </div>
-              <span ng-include="'service-logo-template"></span>
-              <img class="vehicle-result-service-provider-img padding-10" ng-src="static/img/drivenow-logo.png"/>
-              <div class="vehicle-result-booking-details padding-10">
-                GetAround Instant Book, Requires Zipcar Membership
-              </div>
-              <div class="vehicle-result-metadata-preview padding-10">
-                "Kate", Ice Blue, what a ride
-              </div> 
-            </div>
-            <div class="col-xs-5 vehicle-result-right padding-10">
-              <div class="vehicle-result-price">
-                $[[result['price_total'] ]]
-              </div>
-              <div class="vehicle-result-distance">
-                0.2 mi.
-              </div>
-              <div class="vehicle-result-price-details">
-                [[result['price_details'] ]]
+              <div class="col-xs-5 vehicle-result-right padding-10">
+                <div class="vehicle-result-price">
+                  $[[result['price_total'] ]]
+                </div>
+                <div class="vehicle-result-distance">
+                  [[distanceMiles(result) | number: 1]] mi
+                </div>
+                <div class="vehicle-result-price-details">
+                  [[result['price_details'] ]]
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="container" id="detailed-view-container">
+      <div class="row">
+      </div>
+    </div>
+
   </div>
 
-  <div class="container" id="detailed-view-container">
-    <div class="row">
-    </div>
-  </div>
   <script>
     initApp();
   </script>
+
 </body>
 </html>
