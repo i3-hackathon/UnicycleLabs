@@ -111,7 +111,9 @@ function SearchFormCtrl($scope, $appState, $http) {
 
 function VehicleResultsCtrl($scope, $appState) {
   $scope.mapState = {
-    map: null
+    map: null,
+    markers: [],
+    currentLocationMarker: null
   };
 
   $scope.mapOptions = {
@@ -129,6 +131,10 @@ function VehicleResultsCtrl($scope, $appState) {
   };
 
   $scope.mapCreated = function(map) {
+    $scope.drawResults(map);
+  };
+
+  $scope.drawResults = function(map) {
     var bounds = new google.maps.LatLngBounds();
     $.each($appState.vehicleResults, function(i, result) {
       var location = gmapsLatLngFromJson(result['location']);
@@ -142,16 +148,34 @@ function VehicleResultsCtrl($scope, $appState) {
         $appState.scrollResult = result;
         $scope.$apply();
       });
+      $scope.mapState.markers.push(marker);
     });
 
-    var currentLocationMarker = new google.maps.Marker({
+    $scope.mapState.currentLocationMarker = new google.maps.Marker({
       map: map,
       position: $appState.searchLocation,
       icon: 'static/img/my-location-map-logo.png'
-    })
+    });
 
-    map.fitBounds(bounds);
+    map && map.fitBounds(bounds);
   };
+
+  $scope.clearMap = function() {
+    if (!$scope.mapState.map) {
+      return;
+    }
+    $.each($scope.mapState.markers, function(i, marker) {
+      marker.setMap(null);
+    });
+    $scope.mapState.currentLocationMarker.setMap(null);
+  };
+
+  $scope.$watch('appState.vehicleResults', function(newResults, oldResults) {
+    if (newResults) {
+      $scope.clearMap();
+      $scope.drawResults($scope.mapState.map);
+    }
+  });
 
   $scope.distanceMiles = function(result) {
     return result && result['distance_meters'] * 0.000621371;
