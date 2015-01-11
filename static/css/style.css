@@ -159,6 +159,7 @@ a:hover {
   border-bottom: 1px solid #AAAAAA;
   padding: 0px;
   background-color: #F7F7F7;
+  cursor: pointer;
 }
 
 #vehicle-results-container .vehicle-result-left {
@@ -230,6 +231,14 @@ a:hover {
   width: 100%;
   margin: 0px;
   min-height: calc(100% - 70px);
+  position: absolute;
+  top: 70px;
+}
+
+#detailed-view-container .close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 #detailed-view-container .row {
@@ -241,6 +250,7 @@ a:hover {
   margin: 0px auto;
   max-width: 600px;
   background-color: #FFFFFF;
+  position: relative;
 }
 
 #detailed-view-container .detailed-view-img {

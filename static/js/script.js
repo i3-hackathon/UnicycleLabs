@@ -25,6 +25,7 @@ function gmapsLatLngFromJson(latlngJson) {
 function AppStateModel() {
   this.vehicleResults = null;
   this.selectedResult = null;
+  this.scrollResult = null;
   this.searchLocation = null;
   this.collapseSearch = false;
 
@@ -137,7 +138,7 @@ function VehicleResultsCtrl($scope, $appState) {
         position: location
       });
       google.maps.event.addListener(marker, 'click', function() {
-        $appState.selectedResult = result;
+        $appState.scrollResult = result;
         $scope.$apply();
       });
     });
@@ -157,6 +158,12 @@ function VehicleResultsCtrl($scope, $appState) {
   $scope.distanceMiles = function(result) {
     return result['distance_meters'] * 0.000621371;
   };
+}
+
+function DetailViewCtrl($scope) {
+  $scope.distanceMiles = function(result) {
+    return result['distance_meters'] * 0.000621371;
+  };  
 }
 
 /*** Directives ***/
@@ -250,6 +257,7 @@ window['initApp'] = function() {
     .controller('RootCtrl', RootCtrl)
     .controller('SearchFormCtrl', SearchFormCtrl)
     .controller('VehicleResultsCtrl', VehicleResultsCtrl)
+    .controller('DetailViewCtrl', DetailViewCtrl)
     .directive('htdGooglePlaceAutocomplete', htdGooglePlaceAutocomplete)
     .directive('htdGoogleMap', htdGoogleMap)
     .directive('htdScrollToSelector', htdScrollToSelector)

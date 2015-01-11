@@ -90,10 +90,12 @@
         </div>
         <div class="vehicle-results"
           htd-scroll-to-selector
-          scroll-dest-selector=".vehicle-result[vehiclename='[[appState.selectedResult['vehicle_name'] ]]']"
-          scroll-on-changes-to="appState.selectedResult">
+          scroll-dest-selector=".vehicle-result[vehiclename='[[appState.scrollResult['vehicle_name'] ]]']"
+          scroll-on-changes-to="appState.scrollResult">
           <div ng-repeat="result in appState.vehicleResults">
-            <div class="vehicle-result col-xs-12" vehiclename="[[result['vehicle_name'] ]]">
+            <div class="vehicle-result col-xs-12"
+              vehiclename="[[result['vehicle_name'] ]]"
+              ng-click="appState.selectedResult = result">
               <div class="col-xs-7 vehicle-result-left">
                 <img class="vehicle-result-img" ng-src="[[result['image_url'] ]]"/>
                 <div class="vehicle-result-make-model padding-10">
@@ -121,9 +123,16 @@
       </div>
     </div>
 
-    <div class="container padding-0" id="detailed-view-container">
+    <div class="container padding-0" id="detailed-view-container"
+      ng-controller="DetailViewCtrl"
+      ng-show="appState.selectedResult">
       <div class="row padding-0">
         <div class="detailed-view padding-0">
+          <div class="close-button">
+            <a href="javascript:void(0)" ng-click="appState.selectedResult = null">
+              <span class="glyphicon glyphicon-remove-circle"></span>
+            </a>
+          </div>
           <img class="detailed-view-img" src="[[appState.selectedResult['image_url'] ]]"/>
           <div class="btn-wrapper">
             <button class="btn btn-book">
