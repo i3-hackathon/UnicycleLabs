@@ -27,40 +27,55 @@
 
   <div class="main-content">
 
-    <div class="search-form" ng-controller="SearchFormCtrl" ng-show="!appState.collapseSearch">
-      <div class="form-group location-input-group">
-        <label for="location-input">Location</label>
-        <input type="text" class="form-control"
-          htd-google-place-autocomplete
-          on-place-change="placeChanged($newPlace)"
-          ng-model="form.rawLocation" id="location-input"
-          ng-focus="locationInputFocused()"/>
-        <div class="location-spinner" ng-show="gettingCurrentLocation">
-          <img src="/static/img/spinner-small.gif"/>
+    <div class="container" id="search-cars-container">
+      <div class="row">
+        <div class="search-cars">
+          <div class="search-form" ng-controller="SearchFormCtrl" ng-show="!appState.collapseSearch">
+            <div class="form-group location padding-10 location-input-group">
+              <label for="location-input">Location</label>
+              <input type="text" class="form-control"
+                htd-google-place-autocomplete
+                on-place-change="placeChanged($newPlace)"
+                ng-model="form.rawLocation" id="location-input"
+                ng-focus="locationInputFocused()"/>
+              <div class="location-spinner" ng-show="gettingCurrentLocation">
+                <img src="/static/img/spinner-small.gif"/>
+              </div>
+            </div>
+            <div class="form-group start-time col-xs-6 padding-10">
+              <label>Start Time</label>
+              <timepicker ng-model="form.startTime" minute-step="30">
+              </timepicker>
+            </div>
+            <div class="form-group end-time col-xs-6 padding-10">
+              <label>End Time</label>
+              <timepicker ng-model="form.endTime" minute-step="30">
+              </timepicker>
+            </div>
+            <div class="btn-wrapper">
+              <button class="btn btn-search" ng-click="submit()" ng-disabled="!canSubmit()">
+                SEARCH FOR CARS
+              </button>
+            </div>
+            <div class="search-spinner" ng-show="searching">
+              <div id="circleG">
+                <div id="circleG_1" class="circleG">
+                </div>
+                <div id="circleG_2" class="circleG">
+                </div>
+                <div id="circleG_3" class="circleG">
+                </div>
+              </div>            
+            </div>
+          </div>
+
+          <div class="modify-search-link" ng-show="appState.collapseSearch">
+            <a href="javascript:void(0)" ng-click="appState.collapseSearch = false">
+              &laquo; Modify Search
+            </a>
+          </div>
         </div>
       </div>
-      <div class="form-group">
-        <label>Start time</label>
-        <timepicker ng-model="form.startTime" minute-step="30">
-        </timepicker>
-      </div>
-      <div class="form-group">
-        <label>End time</label>
-        <timepicker ng-model="form.endTime" minute-step="30">
-        </timepicker>
-      </div>
-      <button class="btn btn-default" ng-click="submit()" ng-disabled="!canSubmit()">
-        Search
-      </button>
-      <div class="search-spinner" ng-show="searching">
-        <img src="/static/img/spinner-small.gif"/>
-      </div>
-    </div>
-
-    <div class="modify-search-link" ng-show="appState.collapseSearch">
-      <a href="javascript:void(0)" ng-click="appState.collapseSearch = false">
-        &laquo; modify search
-      </a>
     </div>
 
     <div class="container padding-0" id="vehicle-results-container"
@@ -94,7 +109,7 @@
                   $[[result['price_total'] | number:0]]
                 </div>
                 <div class="vehicle-result-distance">
-                  [[distanceMiles(result) | number: 1]] mi
+                  [[distanceMiles(result) | number:1]] mi
                 </div>
                 <div class="vehicle-result-price-details">
                   [[result['price_details'] ]]
@@ -109,32 +124,40 @@
     <div class="container padding-0" id="detailed-view-container">
       <div class="row padding-0">
         <div class="detailed-view padding-0">
-<!--           <span class="detailed-view-close glyphicon glyphicon-remove"></span> -->
-          <img class="detailed-view-img" src="https://www.getaround.com/images_server/blob/AMIfv97WSH-hw3gVt18KuCawAIyz8pDiPNDelmu9LaRr5pqSY4BmseiU9gQfA4WHGX9kcm_BQtDCxVAdp_FnTdxL3BNe5Eh2JyJQraAIkaosEf5M4PyJN94vvgqpp5oRonRrYksoOruzvV06CkYL43s-hdEXpsjVgQ">
-          <div class="book-now-btn">
-            <span class="small-caps">B</span>OOK <span class="small-caps">C</span>AR
+          <img class="detailed-view-img" src="[[appState.selectedResult['image_url'] ]]"/>
+          <div class="btn-wrapper">
+            <button class="btn btn-book">
+              BOOK THIS CAR
+            </button>
           </div>
-          <div class="vehicle-result-make-model padding-10">
-            [[result['make'] ]] [[result['model'] ]]
+          <div class="detailed-view-summary col-xs-12">
+            <div class="vehicle-result-make-model col-xs-6 padding-10">
+              [[appState.selectedResult['make'] ]] [[appState.selectedResult['model'] ]]
+            </div>
+            <div class="vehicle-result-distance col-xs-3 padding-10">
+              [[distanceMiles(appState.selectedResult) | number:1 ]] mi
+            </div>
+            <div class="vehicle-result-price col-xs-3 padding-10">
+              $[[appState.selectedResult['price_total'] | number:0 ]]
+            </div>
           </div>
-          <img class="vehicle-result-service-provider-img padding-10" ng-src="static/img/[[result['service_logo_url'] ]]"/>
-          <div class="vehicle-result-name">
-            Kate
-          </div>
-          <div class="vehicle-result-address">
-            650 Chestnut St., San Francisco, CA
-          </div>
-          <div class="vehicle-result-distance">
-            1.2 mi
-          </div>
-          <div class="vehicle-result-fuel-type">
-            Electric
-          </div>
-          <div class="vehicle-result-fuel-level">
-            80%
-          </div>
-          <div class="vehicle-result-additional-details">
-            This is a giant text blob pulled from respective services. Varying content here. This is a giant text blob pulled from respective services. Varying content here. This is a giant text blob pulled from respective services. Varying content here. This is a giant text blob pulled from respective services. Varying content here.
+          <div class="detailed-view-details col-xs-12">
+            <img class="vehicle-result-service-provider-img padding-10" ng-src="static/img/[[appState.selectedResult['service_logo_url'] ]]"/>
+            <div class="vehicle-result-name col-xs-12 padding-10">
+              [[appState.selectedResult['vehicle_name'] ]]
+            </div>
+            <div class="vehicle-result-address col-xs-12 padding-10">
+              [[appState.selectedResult['address'] ]]
+            </div>
+            <div class="vehicle-result-fuel-type col-xs-6 padding-10">
+              Vehicle Type: [[appState.selectedResult['fuel_type'] ]]
+            </div>
+            <div class="vehicle-result-fuel-level col-xs-6 padding-10">
+              Fuel Level: [[appState.selectedResult['fuel_level'] ]]
+            </div>
+            <div class="vehicle-result-additional-details col-xs-12 padding-10">
+              This is a giant text blob pulled from respective services. Varying content here.
+            </div>
           </div>
         </div>
       </div>
