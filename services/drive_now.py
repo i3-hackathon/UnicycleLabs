@@ -19,7 +19,8 @@ class DriveNowService(base_service.VehicleService):
             })
         response = session.get(url, params=params)
         nearest_city = response.json()['items'][0]
-        return self.make_vehicles(vehicle_request, nearest_city['cars']['items'])
+        vehicles = self.make_vehicles(vehicle_request, nearest_city['cars']['items'])
+        return [v for v in vehicles if v.distance_meters < 8000]
 
     def make_vehicles(self, vehicle_request, cars):
         vehicles = []

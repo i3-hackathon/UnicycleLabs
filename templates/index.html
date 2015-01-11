@@ -152,20 +152,20 @@
           </div>
           <div class="detailed-view-details col-xs-12">
             <img class="vehicle-result-service-provider-img padding-10" ng-src="static/img/[[appState.selectedResult['service_logo_url'] ]]"/>
-            <div class="vehicle-result-name col-xs-12 padding-10">
+            <div class="vehicle-result-name col-xs-12 padding-10" ng-show="appState.selectedResult['vehicle_name']">
               [[appState.selectedResult['vehicle_name'] ]]
             </div>
-            <div class="vehicle-result-address col-xs-12 padding-10">
+            <div class="vehicle-result-address col-xs-12 padding-10" ng-show="appState.selectedResult['address']">
               [[appState.selectedResult['address'] ]]
             </div>
-            <div class="vehicle-result-fuel-type col-xs-6 padding-10">
+            <div class="vehicle-result-fuel-type col-xs-6 padding-10" ng-show="appState.selectedResult['fuel_type']">
               Vehicle Type: [[appState.selectedResult['fuel_type'] ]]
             </div>
-            <div class="vehicle-result-fuel-level col-xs-6 padding-10">
+            <div class="vehicle-result-fuel-level col-xs-6 padding-10" ng-show="appState.selectedResult['fuel_level']">
               Fuel Level: [[appState.selectedResult['fuel_level'] ]]
             </div>
-            <div class="vehicle-result-additional-details col-xs-12 padding-10">
-              This is a giant text blob pulled from respective services. Varying content here.
+            <div class="vehicle-result-additional-details col-xs-12 padding-10" ng-show="appState.selectedResult['details']">
+              [[appState.selectedResult['details'] ]]
             </div>
           </div>
         </div>
