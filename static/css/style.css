@@ -7,6 +7,10 @@ html, body {
   line-height: 1.428571429;
 }
 
+.padding-9 {
+  padding: 0px;
+}
+
 .padding-5 {
   padding: 0px 5px;
 }
@@ -51,11 +55,6 @@ a:hover {
   font-size: 1.2em;
 }
 
-#carshare-query-container {
-  margin-top: 70px;
-  padding: 20px 0px;
-}
-
 .search-form {
   max-width: 500px;
   margin: auto;
@@ -76,12 +75,10 @@ a:hover {
 #vehicle-results-container {
   width: 100%;
   margin: 0px;
-  padding: 0px;
 }
 
 #vehicle-results-container .row {
   width: 100%;
-  padding: 0px;
   margin: 0px;
 }
 
@@ -93,7 +90,7 @@ a:hover {
 #vehicle-results-container .vehicle-result {
   border-bottom: 1px solid #AAAAAA;
   padding: 0px;
-  background-color: #F7F7F7;
+  background-color: #FAFAFA;
 }
 
 #vehicle-results-container .vehicle-result-left {
@@ -146,6 +143,21 @@ a:hover {
 
 #vehicle-results-container .vehicle-result-price-details {
   padding: 10px 0px;  
+}
+
+#detailed-view-container {
+  width: 100%;
+  margin: 0px;
+}
+
+#detailed-view-container .row {
+  width: 100%;
+  margin: 0px;
+}
+
+#detailed-view-container .detailed-view-img {
+  margin: 0px auto;
+  max-width: 600px;
 }
 
 @media (max-width: 768px) {

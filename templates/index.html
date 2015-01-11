@@ -55,8 +55,8 @@
     </div>
   </div>
 
-  <div class="container" id="vehicle-results-container">
-    <div class="row">
+  <div class="container" id="vehicle-results-container" class="padding-0">
+    <div class="row padding-0">
       <div class="vehicle-results" ng-controller="VehicleResultsCtrl"
         ng-if="appState.hasVehicleResults()">
         <div ng-repeat="result in appState.vehicleResults">
@@ -92,8 +92,10 @@
     </div>
   </div>
 
-  <div class="container" id="detailed-view-container">
-    <div class="row">
+  <div class="container" id="detailed-view-container" class="padding-0">
+    <div class="row" class="padding-0">
+      <div class="detailed-view col-xs-12">
+      </div>
     </div>
   </div>
   <script>
