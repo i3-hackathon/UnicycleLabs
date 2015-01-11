@@ -1,3 +1,5 @@
+import re
+
 import requests
 
 import geo
@@ -5,6 +7,8 @@ from models import all_models
 from models import model_base
 from services import base_service
 import utils
+
+VEHICLE_MODEL_ALT_TEXT_RE = re.compile('<img[^>]+alt="([^"]+)"')
 
 class ZipcarLocation(model_base.Model):
     description = model_base.StringField('description')
@@ -37,7 +41,7 @@ class ZipcarService(base_service.VehicleService):
         nonempty_locations = [l for l in locations if l.vehicle_count >= 1]
         ordered_locations = sorted(nonempty_locations,
             key=lambda loc: geo.earth_distance_meters(req_lat, req_lng, loc.latitude, loc.longitude))
-        return ordered_locations[:3]
+        return ordered_locations[:10]
 
     def expand_locations(self, vehicle_request, locations):
         fns = []
@@ -58,6 +62,8 @@ class ZipcarService(base_service.VehicleService):
 
     def make_vehicle(self, vehicle_request, zipcar_vehicle, latlng):
         zv = zipcar_vehicle
+        # TODO: paralleize this
+        vehicle_details = self.get_vehicle_details(zv['vehicleId'])
         return all_models.Vehicle({
             'service': all_models.Service.ZIPCAR,
             'price_total': float(zv['hourlyCost']) * vehicle_request.duration_minutes / 60.,
@@ -65,10 +71,22 @@ class ZipcarService(base_service.VehicleService):
             'vehicle_name': zv['description'],
             'location': latlng.raw,
             'distance_meters': self.compute_distance(vehicle_request, latlng.lat, latlng.lng),
-            'image_url': 'https://media.zipcar.com/images/model-image?model_id=%s&mode=thumb' % zv['modelId'],
+            'make': vehicle_details.get('make'),
+            'model': vehicle_details.get('model'),
+            'image_url': 'https://media.zipcar.com/images/model-image?model_id=%s' % zv['modelId'],
             'service_logo_url': 'zipcar-logo.png',
             'map_icon_url': 'zipcar-map-logo.png',
             })
+
+    def get_vehicle_details(self, vehicle_id):
+        url = 'http://www.zipcar.com/api/drupal/1.0/car-profile/sf/%s?locale=en-US' % vehicle_id
+        html = requests.get(url).text
+        match = VEHICLE_MODEL_ALT_TEXT_RE.search(html)
+        make_model = match.group(1) if match else None
+        return {
+            'make': make_model.split(' ')[0],
+            'model': ' '.join(make_model.split(' ')[1:])
+        }
 
 
 if __name__ == '__main__':
