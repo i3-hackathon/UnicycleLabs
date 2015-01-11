@@ -33,10 +33,12 @@ class GetaroundService(base_service.VehicleService):
                     'lat': car['latitude'],
                     'lng': car['longitude'],
                     },
+                'distance_meters': self.compute_distance(vehicle_request, car['latitude'], car['longitude']),
                 'make': car['make'],
                 'model': car['model'],
                 'year': int(car['year']),
                 'image_url': car['car_photo'],
+                'service_logo_url': 'getaround-logo.png',
                 }))
         return vehicles
 

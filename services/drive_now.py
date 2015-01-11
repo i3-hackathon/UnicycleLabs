@@ -32,6 +32,7 @@ class DriveNowService(base_service.VehicleService):
                     'lat': car['latitude'],
                     'lng': car['longitude'],
                     },
+                'distance_meters': self.compute_distance(vehicle_request, car['latitude'], car['longitude']),
                 'address': ' '.join(car['address']),
                 'license_plate': car['licensePlate'],
                 'make': car['make'],
@@ -39,6 +40,7 @@ class DriveNowService(base_service.VehicleService):
                 'color': car['color'],
                 'vehicle_name': car['name'],
                 'image_url': 'https://us.drive-now.com/static/drivenow/img/cars/%s.png' % car['modelIdentifier'],
+                'service_logo_url': 'drivenow-logo.png',
                 }))
         return vehicles
 

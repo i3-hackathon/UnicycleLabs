@@ -1,5 +1,6 @@
 import datetime
 
+import geo
 from models import all_models
 from models import model_base
 
@@ -14,5 +15,10 @@ class VehicleRequest(model_base.Model):
         return delta.seconds / 60    
 
 class VehicleService(object):
-    def get_vehicles(vehicle_request):
+    def get_vehicles(self, vehicle_request):
         return []
+
+    def compute_distance(self, vehicle_request, car_lat, car_lng):
+        return geo.earth_distance_meters(
+            vehicle_request.location.lat, vehicle_request.location.lng,
+            car_lat, car_lng)
