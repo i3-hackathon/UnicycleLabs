@@ -125,7 +125,8 @@
 
     <div class="container padding-0" id="detailed-view-container"
       ng-controller="DetailViewCtrl"
-      ng-show="appState.selectedResult">
+      ng-show="appState.selectedResult"
+      ng-if="appState.hasVehicleResults()">
       <div class="row padding-0">
         <div class="detailed-view padding-0">
           <div class="close-button">
@@ -133,7 +134,7 @@
               <span class="glyphicon glyphicon-remove-circle"></span>
             </a>
           </div>
-          <img class="detailed-view-img" src="[[appState.selectedResult['image_url'] ]]"/>
+          <img class="detailed-view-img" ng-src="[[appState.selectedResult['image_url'] ]]"/>
           <div class="btn-wrapper">
             <button class="btn btn-book">
               BOOK THIS CAR
@@ -151,7 +152,8 @@
             </div>
           </div>
           <div class="detailed-view-details col-xs-12">
-            <img class="vehicle-result-service-provider-img padding-10" ng-src="static/img/[[appState.selectedResult['service_logo_url'] ]]"/>
+            <img class="vehicle-result-service-provider-img padding-10" ng-src="static/img/[[appState.selectedResult['service_logo_url'] ]]"
+              ng-if="appState.selectedResult"/>
             <div class="vehicle-result-name col-xs-12 padding-10" ng-show="appState.selectedResult['vehicle_name']">
               [[appState.selectedResult['vehicle_name'] ]]
             </div>

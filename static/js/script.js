@@ -157,13 +157,13 @@ function VehicleResultsCtrl($scope, $appState) {
   };
 
   $scope.distanceMiles = function(result) {
-    return result['distance_meters'] * 0.000621371;
+    return result && result['distance_meters'] * 0.000621371;
   };
 }
 
 function DetailViewCtrl($scope) {
   $scope.distanceMiles = function(result) {
-    return result['distance_meters'] * 0.000621371;
+    return result && result['distance_meters'] * 0.000621371;
   };  
 }
 
