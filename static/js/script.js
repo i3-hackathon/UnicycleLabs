@@ -16,6 +16,12 @@ function endTimeFromStartTime(startTime, durationHours) {
       startTime.getDate(), startTime.getHours() + durationHours, startTime.getMinutes());
 }
 
+function gmapsLatLngFromJson(latlngJson) {
+  return new google.maps.LatLng(latlngJson['lat'], latlngJson['lng']);
+}
+
+/*** Models ***/
+
 function AppStateModel() {
   this.vehicleResults = null;
 
@@ -74,6 +80,10 @@ function SearchFormCtrl($scope, $appState, $http) {
     });
   };
 
+  $scope.canSubmit = function() {
+    return !$scope.searching && $scope.form.lat;
+  };
+
   $scope.submit = function() {
     $scope.searching = true;
     var params = {
@@ -92,7 +102,38 @@ function SearchFormCtrl($scope, $appState, $http) {
   $scope.getCurrentLocation();
 }
 
-function VehicleResultsCtrl($scope) {
+function VehicleResultsCtrl($scope, $appState) {
+  $scope.mapState = {
+    map: null
+  };
+
+  $scope.mapOptions = {
+    center: new google.maps.LatLng(0, 0),
+    draggable: true,
+    zoom: 15,
+    mapTypeControl: false,
+    panControl: false,
+    scaleControl: true,
+    streetViewControl: false,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.SMALL,
+      position: google.maps.ControlPosition.TOP_LEFT
+    }
+  };
+
+  $scope.mapCreated = function(map) {
+    var bounds = new google.maps.LatLngBounds();
+    $.each($appState.vehicleResults, function(i, result) {
+      var location = gmapsLatLngFromJson(result['location']);
+      bounds.extend(location);
+      var marker = new google.maps.Marker({
+        map: map,
+        position: location
+      });
+    });
+    map.fitBounds(bounds);
+  };
+
   $scope.distanceMiles = function(result) {
     return result['distance_meters'] * 0.000621371;
   };
@@ -123,6 +164,35 @@ function htdGooglePlaceAutocomplete($parse) {
   };
 }
 
+function htdGoogleMap($timeout) {
+  return {
+    restrict: 'AE',
+    scope: {
+      map: '=',
+      mapOptions: '=',
+      resizeWhen: '=',
+      afterCreation: '&'
+    },
+    link: function(scope, element, attrs) {
+      var mapOptions = scope.mapOptions || {};
+      var map = scope.map = new google.maps.Map(element[0], mapOptions);
+      scope.$watch('resizeWhen', function(newValue) {
+        if (newValue) {
+          var oldCenter = map.getCenter();
+          google.maps.event.trigger(map, 'resize');
+          map.setCenter(oldCenter);
+        }
+      });
+      $timeout(function() {
+        var oldCenter = map.getCenter();
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter(oldCenter);
+        scope.afterCreation({$map: map});
+      });
+    }
+  };
+}
+
 /*** Bootstrapping ***/
 
 window['initApp'] = function() {
@@ -136,6 +206,7 @@ window['initApp'] = function() {
     .controller('SearchFormCtrl', SearchFormCtrl)
     .controller('VehicleResultsCtrl', VehicleResultsCtrl)
     .directive('htdGooglePlaceAutocomplete', htdGooglePlaceAutocomplete)
+    .directive('htdGoogleMap', htdGoogleMap)
     .value('$appState', new AppStateModel());
 
   angular.element(document).ready(function() {

@@ -19,7 +19,6 @@ class GetaroundService(base_service.VehicleService):
             'page_sort': 'magic',
             }
         response = requests.get(url, params=params)
-        print response.url
         return self.make_vehicles(vehicle_request, response.json()['cars'])
 
     def make_vehicles(self, vehicle_request, cars):

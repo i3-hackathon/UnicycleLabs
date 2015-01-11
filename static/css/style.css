@@ -153,6 +153,17 @@ a:hover {
   padding: 10px 0px;  
 }
 
+.vehicle-results-map {
+  width: 100%;
+  height: 500px;
+  max-height: 100vw;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
 @media (max-width: 768px) {
   #vehicle-results-container .vehicle-result-price,
   #vehicle-results-container .vehicle-result-distance {
