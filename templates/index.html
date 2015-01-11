@@ -14,10 +14,34 @@
   <link rel="shortcut icon" href="/static/img/favicon.png"/>
 </head>
 <body ng-controller="RootCtrl">
-  <div>
-    <button class="btn btn-default" ng-click="dummySearch()">
+  <div class="search-form" ng-controller="SearchFormCtrl">
+    <div class="form-group location-input-group">
+      <label for="location-input">Location</label>
+      <input type="text" class="form-control"
+        htd-google-place-autocomplete
+        on-place-change="placeChanged($newPlace)"
+        ng-model="form.rawLocation" id="location-input"
+        ng-focus="locationInputFocused()"/>
+      <div class="location-spinner" ng-show="gettingCurrentLocation">
+        <img src="/static/img/spinner-small.gif"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Start time</label>
+      <timepicker ng-model="form.startTime" minute-step="30">
+      </timepicker>
+    </div>
+    <div class="form-group">
+      <label>End time</label>
+      <timepicker ng-model="form.endTime" minute-step="30">
+      </timepicker>
+    </div>
+    <button class="btn btn-default" ng-click="submit()" ng-disabled="searching">
       Search
     </button>
+    <div class="search-spinner" ng-show="searching">
+      <img src="/static/img/spinner-small.gif"/>
+    </div>
   </div>
 
   <div class="container" id="vehicle-results-container">

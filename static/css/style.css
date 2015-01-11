@@ -29,6 +29,25 @@ a:hover {
   margin-bottom: 0;
 }
 
+.search-form {
+  max-width: 500px;
+  margin: auto;
+}
+
+.search-form .location-input-group {
+  position: relative;
+}
+
+.search-form .location-input-group .location-spinner {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.search-o
+
 #vehicle-results-container {
   width: 100%;
 }
