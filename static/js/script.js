@@ -147,10 +147,7 @@ function VehicleResultsCtrl($scope, $appState) {
     var currentLocationMarker = new google.maps.Marker({
       map: map,
       position: $appState.searchLocation,
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: 10
-      }
+      icon: 'static/img/my-location-map-logo.png'
     })
 
     map.fitBounds(bounds);

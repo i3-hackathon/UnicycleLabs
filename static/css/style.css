@@ -265,7 +265,7 @@ a:hover {
   max-width: 600px;
   background-color: #FFFFFF;
   position: relative;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 60px);
 }
 
 #detailed-view-container .detailed-view-img {
