@@ -24,6 +24,7 @@ function gmapsLatLngFromJson(latlngJson) {
 
 function AppStateModel() {
   this.vehicleResults = null;
+  this.searchLocation = null;
 
   this.hasVehicleResults = function() {
     return this.vehicleResults && this.vehicleResults.length;
@@ -96,6 +97,8 @@ function SearchFormCtrl($scope, $appState, $http) {
       .success(function(response) {
         $scope.searching = false;
         $appState.vehicleResults = response['vehicles'];
+        $appState.searchLocation = new google.maps.LatLng(
+          $scope.form.lat, $scope.form.lng);
       });
   };
 
@@ -131,6 +134,16 @@ function VehicleResultsCtrl($scope, $appState) {
         position: location
       });
     });
+
+    var currentLocationMarker = new google.maps.Marker({
+      map: map,
+      position: $appState.searchLocation,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 10
+      }
+    })
+
     map.fitBounds(bounds);
   };
 

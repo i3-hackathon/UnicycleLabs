@@ -23,7 +23,7 @@ class GetaroundService(base_service.VehicleService):
 
     def make_vehicles(self, vehicle_request, cars):
         vehicles = []
-        for car in cars[:3]:
+        for car in cars[:10]:
             vehicles.append(all_models.Vehicle({
                 'service': all_models.Service.GETAROUND,
                 'price_total': car['total_price'],
