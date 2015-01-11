@@ -56,6 +56,23 @@ a:hover {
   padding: 20px 0px;
 }
 
+.search-form {
+  max-width: 500px;
+  margin: auto;
+}
+
+.search-form .location-input-group {
+  position: relative;
+}
+
+.search-form .location-input-group .location-spinner {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
 #vehicle-results-container {
   width: 100%;
   margin: 0px;
