@@ -30,8 +30,8 @@
 
     <div class="container" id="search-cars-container">
       <div class="row">
-        <div class="search-cars">
-          <div class="search-form" ng-controller="SearchFormCtrl" ng-show="!appState.collapseSearch">
+        <div class="search-cars" ng-controller="SearchFormCtrl">
+          <div class="search-form" ng-show="!appState.collapseSearch">
             <div class="form-group location padding-10 location-input-group">
               <label for="location-input">Location</label>
               <input type="text" class="form-control"
@@ -71,7 +71,7 @@
           </div>
 
           <div class="modify-search-link" ng-show="appState.collapseSearch">
-            <a href="javascript:void(0)" ng-click="appState.collapseSearch = false">
+            <a href="javascript:void(0)" ng-click="modifySearch()">
               &laquo; Modify Search
             </a>
           </div>

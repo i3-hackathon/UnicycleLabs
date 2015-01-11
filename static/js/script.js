@@ -106,6 +106,11 @@ function SearchFormCtrl($scope, $appState, $http) {
       });
   };
 
+  $scope.modifySearch = function() {
+    $appState.collapseSearch = false;
+    $appState.vehicleResults = null;
+  };
+
   $scope.getCurrentLocation();
 }
 
