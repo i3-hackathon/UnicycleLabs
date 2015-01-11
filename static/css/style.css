@@ -56,6 +56,12 @@ a:hover {
   font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
+.navbar-default .app-logo {
+  height: 40px;
+  position: relative;
+  bottom: 5px;
+}
+
 .main-content {
   position: absolute;
   top: 70px;
