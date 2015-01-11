@@ -40,7 +40,8 @@ def get_vehicles(vehicle_request):
     for service in VEHICLE_SERVICES:
         fns.append(lambda service=service: service.get_vehicles(vehicle_request))
     vehicles_lists = utils.parallelize_closures(fns)
-    return utils.flatten(vehicles_lists)
+    vehicles = utils.flatten(vehicles_lists)
+    return sorted(vehicles, key=lambda v: v.distance_meters)
 
 if __name__ == '__main__':
     app.debug = constants.DEBUG

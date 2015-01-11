@@ -16,8 +16,17 @@ function endTimeFromStartTime(startTime, durationHours) {
       startTime.getDate(), startTime.getHours() + durationHours, startTime.getMinutes());
 }
 
+function gmapsLatLngFromJson(latlngJson) {
+  return new google.maps.LatLng(latlngJson['lat'], latlngJson['lng']);
+}
+
+/*** Models ***/
+
 function AppStateModel() {
   this.vehicleResults = null;
+  this.selectedResult = null;
+  this.searchLocation = null;
+  this.collapseSearch = false;
 
   this.hasVehicleResults = function() {
     return this.vehicleResults && this.vehicleResults.length;
@@ -74,6 +83,10 @@ function SearchFormCtrl($scope, $appState, $http) {
     });
   };
 
+  $scope.canSubmit = function() {
+    return !$scope.searching && $scope.form.lat;
+  };
+
   $scope.submit = function() {
     $scope.searching = true;
     var params = {
@@ -85,14 +98,62 @@ function SearchFormCtrl($scope, $appState, $http) {
     $http.get('/search?' + $.param(params))
       .success(function(response) {
         $scope.searching = false;
+        $appState.collapseSearch = true;
         $appState.vehicleResults = response['vehicles'];
+        $appState.searchLocation = new google.maps.LatLng(
+          $scope.form.lat, $scope.form.lng);
       });
   };
 
   $scope.getCurrentLocation();
 }
 
-function VehicleResultsCtrl($scope) {
+function VehicleResultsCtrl($scope, $appState) {
+  $scope.mapState = {
+    map: null
+  };
+
+  $scope.mapOptions = {
+    center: new google.maps.LatLng(0, 0),
+    draggable: true,
+    zoom: 15,
+    mapTypeControl: false,
+    panControl: false,
+    scaleControl: true,
+    streetViewControl: false,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.SMALL,
+      position: google.maps.ControlPosition.TOP_LEFT
+    }
+  };
+
+  $scope.mapCreated = function(map) {
+    var bounds = new google.maps.LatLngBounds();
+    $.each($appState.vehicleResults, function(i, result) {
+      var location = gmapsLatLngFromJson(result['location']);
+      bounds.extend(location);
+      var marker = new google.maps.Marker({
+        map: map,
+        position: location
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+        $appState.selectedResult = result;
+        $scope.$apply();
+      });
+    });
+
+    var currentLocationMarker = new google.maps.Marker({
+      map: map,
+      position: $appState.searchLocation,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 10
+      }
+    })
+
+    map.fitBounds(bounds);
+  };
+
   $scope.distanceMiles = function(result) {
     return result['distance_meters'] * 0.000621371;
   };
@@ -123,6 +184,60 @@ function htdGooglePlaceAutocomplete($parse) {
   };
 }
 
+function htdGoogleMap($timeout) {
+  return {
+    restrict: 'AE',
+    scope: {
+      map: '=',
+      mapOptions: '=',
+      resizeWhen: '=',
+      afterCreation: '&'
+    },
+    link: function(scope, element, attrs) {
+      var mapOptions = scope.mapOptions || {};
+      var map = scope.map = new google.maps.Map(element[0], mapOptions);
+      scope.$watch('resizeWhen', function(newValue) {
+        if (newValue) {
+          var oldCenter = map.getCenter();
+          google.maps.event.trigger(map, 'resize');
+          map.setCenter(oldCenter);
+        }
+      });
+      $timeout(function() {
+        var oldCenter = map.getCenter();
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter(oldCenter);
+        scope.afterCreation({$map: map});
+      });
+    }
+  };
+}
+
+function htdScrollToSelector($interpolate) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var elem = $(element);
+      scope.$watch(attrs.scrollOnChangesTo, function(value) {
+        if (value != undefined || value != null) {
+          var selector = $interpolate(attrs.scrollDestSelector)(scope);
+          var destOffset = $(selector).offset();
+          if (!destOffset) {
+            // The element could be hidden right now.
+            return;
+          }
+          var oldScrollTop = elem.scrollTop();
+          var newScrollTop = oldScrollTop + destOffset.top - elem.offset().top;
+          if (attrs.skipScrollWhenInView && newScrollTop >= oldScrollTop && newScrollTop < (oldScrollTop + elem.height())) {
+            return;
+          }
+          elem.animate({scrollTop: newScrollTop}, 500);
+        }
+      });
+    }
+  };
+}
+
 /*** Bootstrapping ***/
 
 window['initApp'] = function() {
@@ -136,6 +251,8 @@ window['initApp'] = function() {
     .controller('SearchFormCtrl', SearchFormCtrl)
     .controller('VehicleResultsCtrl', VehicleResultsCtrl)
     .directive('htdGooglePlaceAutocomplete', htdGooglePlaceAutocomplete)
+    .directive('htdGoogleMap', htdGoogleMap)
+    .directive('htdScrollToSelector', htdScrollToSelector)
     .value('$appState', new AppStateModel());
 
   angular.element(document).ready(function() {
