@@ -1,3 +1,6 @@
+import os
+
+from dateutil import parser as dateutil_parser
 from flask import json
 from flask import render_template
 from flask import request
@@ -42,6 +45,13 @@ def get_vehicles(vehicle_request):
     vehicles_lists = utils.parallelize_closures(fns)
     vehicles = utils.flatten(vehicles_lists)
     return sorted(vehicles, key=lambda v: v.distance_meters)
+
+@app.route('/historical')
+def historical():
+    date_str = request.args['date']
+    pickup_latlngs = open(os.path.join(constants.PROJECTPATH, 'data/munich_pickups_%s_1pm.csv' % date_str)).read()
+    return render_template('historical.html', pickup_latlngs=pickup_latlngs,
+        date_str=dateutil_parser.parse(date_str).strftime('%a %b %d, %Y'))
 
 if __name__ == '__main__':
     app.debug = constants.DEBUG
