@@ -64,7 +64,9 @@ class ZipcarService(base_service.VehicleService):
             'price_details': '$%s/hour' % zv['hourlyCost'],
             'vehicle_name': zv['description'],
             'location': latlng.raw,
+            'distance_meters': self.compute_distance(vehicle_request, latlng.lat, latlng.lng),
             'image_url': 'https://media.zipcar.com/images/model-image?model_id=%s&mode=thumb' % zv['modelId'],
+            'service_logo_url': 'zipcar-logo.png',
             })
 
 

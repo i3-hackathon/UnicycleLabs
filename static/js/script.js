@@ -93,7 +93,9 @@ function SearchFormCtrl($scope, $appState, $http) {
 }
 
 function VehicleResultsCtrl($scope) {
-
+  $scope.distanceMiles = function(result) {
+    return result['distance_meters'] * 0.000621371;
+  };
 }
 
 /*** Directives ***/

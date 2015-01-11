@@ -7,7 +7,7 @@ html, body {
   line-height: 1.428571429;
 }
 
-.padding-9 {
+.padding-0 {
   padding: 0px;
 }
 
@@ -21,6 +21,10 @@ html, body {
 
 a:hover {
   text-decoration: none !important;
+}
+
+.small-caps {
+  font-size: 1.2em;
 }
 
 .navbar-default {
@@ -51,13 +55,15 @@ a:hover {
   font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
-.navbar-default .small-caps {
-  font-size: 1.2em;
+.main-content {
+  position: absolute;
+  top: 70px;
+  width: 100%;
 }
 
 .search-form {
-  max-width: 500px;
-  margin: auto;
+  max-width: 600px;
+  margin: 0px auto;
 }
 
 .search-form .location-input-group {
@@ -117,14 +123,12 @@ a:hover {
 
 #vehicle-results-container .vehicle-result-booking-details {
   font-size: 0.9em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 300;
   margin-bottom: 10px;
 }
 
 #vehicle-results-container .vehicle-result-metadata-preview {
   font-size: 0.9em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 300;
   margin-bottom: 10px; 
 }
@@ -155,9 +159,32 @@ a:hover {
   margin: 0px;
 }
 
-#detailed-view-container .detailed-view-img {
+#detailed-view-container .detailed-view {
   margin: 0px auto;
   max-width: 600px;
+}
+
+/*#detailed-view-container .detailed-view-close {
+  position: relative;
+  height: 30px;
+  margin-bottom: -30px;
+  top: 30px;
+}*/
+
+#detailed-view-container .detailed-view-img {
+  width: 100%;
+}
+
+#detailed-view-container .book-now-btn {
+  background-color: #FF9900;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 1.6em;
+  line-height: 50px;
+  height: 50px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; 
 }
 
 @media (max-width: 768px) {
