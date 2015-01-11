@@ -38,6 +38,7 @@ class GetaroundService(base_service.VehicleService):
                 'year': int(car['year']),
                 'image_url': car['car_photo'],
                 'service_logo_url': 'getaround-logo.png',
+                'map_icon_url': 'getaround-map-logo.png',
                 }))
         return vehicles
 

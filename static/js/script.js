@@ -135,7 +135,8 @@ function VehicleResultsCtrl($scope, $appState) {
       bounds.extend(location);
       var marker = new google.maps.Marker({
         map: map,
-        position: location
+        position: location,
+        icon: '/static/img/' + result['map_icon_url']
       });
       google.maps.event.addListener(marker, 'click', function() {
         $appState.scrollResult = result;

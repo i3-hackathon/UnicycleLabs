@@ -38,6 +38,7 @@ class Vehicle(model_base.Model):
     color = model_base.StringField('color')
     vehicle_name = model_base.StringField('vehicle_name', optional=True)
     image_url = model_base.StringField('image_url')
+    map_icon_url = model_base.StringField('map_icon_url')
     service_logo_url = model_base.StringField('service_logo_url')
     fuel_level = model_base.FloatField('fuel_level', optional=True)
     fuel_type = model_base.StringField('fuel_type', optional=True)

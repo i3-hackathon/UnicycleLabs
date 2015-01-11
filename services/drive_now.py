@@ -41,6 +41,7 @@ class DriveNowService(base_service.VehicleService):
                 'vehicle_name': car['name'],
                 'image_url': 'https://us.drive-now.com/static/drivenow/img/cars/%s.png' % car['modelIdentifier'],
                 'service_logo_url': 'drivenow-logo.png',
+                'map_icon_url': 'drivenow-map-logo.png'
                 }))
         return vehicles
 
