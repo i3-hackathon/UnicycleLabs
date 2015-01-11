@@ -24,7 +24,9 @@ function gmapsLatLngFromJson(latlngJson) {
 
 function AppStateModel() {
   this.vehicleResults = null;
+  this.selectedResult = null;
   this.searchLocation = null;
+  this.collapseSearch = false;
 
   this.hasVehicleResults = function() {
     return this.vehicleResults && this.vehicleResults.length;
@@ -96,6 +98,7 @@ function SearchFormCtrl($scope, $appState, $http) {
     $http.get('/search?' + $.param(params))
       .success(function(response) {
         $scope.searching = false;
+        $appState.collapseSearch = true;
         $appState.vehicleResults = response['vehicles'];
         $appState.searchLocation = new google.maps.LatLng(
           $scope.form.lat, $scope.form.lng);
@@ -132,6 +135,10 @@ function VehicleResultsCtrl($scope, $appState) {
       var marker = new google.maps.Marker({
         map: map,
         position: location
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+        $appState.selectedResult = result;
+        $scope.$apply();
       });
     });
 
@@ -206,6 +213,31 @@ function htdGoogleMap($timeout) {
   };
 }
 
+function htdScrollToSelector($interpolate) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var elem = $(element);
+      scope.$watch(attrs.scrollOnChangesTo, function(value) {
+        if (value != undefined || value != null) {
+          var selector = $interpolate(attrs.scrollDestSelector)(scope);
+          var destOffset = $(selector).offset();
+          if (!destOffset) {
+            // The element could be hidden right now.
+            return;
+          }
+          var oldScrollTop = elem.scrollTop();
+          var newScrollTop = oldScrollTop + destOffset.top - elem.offset().top;
+          if (attrs.skipScrollWhenInView && newScrollTop >= oldScrollTop && newScrollTop < (oldScrollTop + elem.height())) {
+            return;
+          }
+          elem.animate({scrollTop: newScrollTop}, 500);
+        }
+      });
+    }
+  };
+}
+
 /*** Bootstrapping ***/
 
 window['initApp'] = function() {
@@ -220,6 +252,7 @@ window['initApp'] = function() {
     .controller('VehicleResultsCtrl', VehicleResultsCtrl)
     .directive('htdGooglePlaceAutocomplete', htdGooglePlaceAutocomplete)
     .directive('htdGoogleMap', htdGoogleMap)
+    .directive('htdScrollToSelector', htdScrollToSelector)
     .value('$appState', new AppStateModel());
 
   angular.element(document).ready(function() {

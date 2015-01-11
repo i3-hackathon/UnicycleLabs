@@ -93,6 +93,8 @@ a:hover {
 #vehicle-results-container .vehicle-results {
   margin: 0px auto;
   max-width: 600px;
+  height: 50vh;
+  overflow-y: scroll;
 }
 
 #vehicle-results-container .vehicle-result {
