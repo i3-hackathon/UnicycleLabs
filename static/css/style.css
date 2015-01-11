@@ -20,13 +20,40 @@ a:hover {
 }
 
 .navbar-default {
-  background-color: rgba(255,255,255,0.95);
+  background-color: #BD2E4B;
   border-color: rgba(255,255,255,0.95);
   border: 1px solid transparent;
   transform: translate3d(0, 0, 0);    
   box-shadow: 0 0 5px rgba(0,0,0,0.1);
   -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.1);  
   margin-bottom: 0;
+  height: 70px;
+  border-radius: 0px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar-default .navbar-header {
+  width: 100%;
+  margin: 0px auto;
+}
+
+.navbar-default .navbar-app-name {
+  text-align: center;
+  width: 100%;
+  line-height: 68px;
+  font-size: 1.6em;
+  color: #FFFFFF;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.navbar-default .small-caps {
+  font-size: 1.2em;
+}
+
+#carshare-query-container {
+  margin-top: 70px;
+  padding: 20px 0px;
 }
 
 .search-form {
@@ -46,28 +73,32 @@ a:hover {
   text-align: center;
 }
 
-.search-o
-
 #vehicle-results-container {
   width: 100%;
+  margin: 0px;
+  padding: 0px;
 }
 
 #vehicle-results-container .row {
   width: 100%;
+  padding: 0px;
+  margin: 0px;
 }
 
 #vehicle-results-container .vehicle-results {
   margin: 0px auto;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 #vehicle-results-container .vehicle-result {
-  padding: 20px 0px;
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #AAAAAA;
+  padding: 0px;
+  background-color: #F7F7F7;
 }
 
 #vehicle-results-container .vehicle-result-left {
-  border-right: 2px solid #b849a3;
+  padding: 0px;
+  background-color: #FFFFFF;
 }
 
 #vehicle-results-container .vehicle-result-right {
@@ -91,12 +122,14 @@ a:hover {
   font-size: 0.9em;
   font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 300;
+  margin-bottom: 10px;
 }
 
 #vehicle-results-container .vehicle-result-metadata-preview {
   font-size: 0.9em;
   font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 300; 
+  font-weight: 300;
+  margin-bottom: 10px; 
 }
 
 #vehicle-results-container .vehicle-result-distance {
@@ -122,5 +155,8 @@ a:hover {
   }
   #vehicle-results-container .vehicle-result-model {
     font-size: 1.3em;
+  }
+  #vehicle-results-container .vehicle-result-price-details {
+    font-size: 0.8em;
   }
 }
