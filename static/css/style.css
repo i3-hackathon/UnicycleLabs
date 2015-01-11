@@ -236,15 +236,23 @@ a:hover {
 #detailed-view-container {
   width: 100%;
   margin: 0px;
-  min-height: calc(100% - 70px);
   position: absolute;
-  top: 70px;
+  top: 0px;
 }
 
 #detailed-view-container .close-button {
   position: absolute;
   top: 5px;
   right: 5px;
+  font-size: 1.5em;
+}
+
+#detailed-view-container a {
+  color: #BD2E4B;
+}
+
+#detailed-view-container a:hover {
+  color: #BD4772;
 }
 
 #detailed-view-container .row {
@@ -257,6 +265,7 @@ a:hover {
   max-width: 600px;
   background-color: #FFFFFF;
   position: relative;
+  min-height: calc(100vh - 70px);
 }
 
 #detailed-view-container .detailed-view-img {
